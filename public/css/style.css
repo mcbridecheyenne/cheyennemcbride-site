@@ -596,6 +596,21 @@ img {
   letter-spacing: 0.03em;
 }
 
+.admin-card-badge-live {
+  background: rgba(92, 138, 92, 0.15);
+  color: var(--color-success);
+}
+
+.admin-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.admin-card-link:hover {
+  color: inherit;
+}
+
 /* ─── Footer ─── */
 .footer {
   margin-top: auto;

@@ -10,4 +10,8 @@ router.get('/admin', ensureAdmin, (req, res) => {
   res.render('admin', { user: req.user });
 });
 
+router.get('/admin/calendar', ensureAdmin, (req, res) => {
+  res.render('admin-calendar', { user: req.user });
+});
+
 module.exports = router;

@@ -144,9 +144,11 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
 // ─── Routes ───
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
+const eventRoutes = require('./routes/events');
 
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
+app.use('/api/events', eventRoutes);
 
 // ─── 404 ───
 app.use((req, res) => {
