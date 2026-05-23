@@ -6,6 +6,10 @@ router.get('/', (req, res) => {
   res.render('index', { user: req.user || null });
 });
 
+router.get('/field-cheatsheet', (req, res) => {
+  res.render('field-cheatsheet', { user: req.user || null });
+});
+
 router.get('/admin', ensureAdmin, (req, res) => {
   res.render('admin', { user: req.user });
 });
