@@ -373,6 +373,16 @@ img {
   border-color: var(--color-accent);
 }
 
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card-link:hover {
+  color: inherit;
+}
+
 .card-icon {
   font-size: 2rem;
   margin-bottom: 16px;
