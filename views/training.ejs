@@ -86,6 +86,34 @@
           <li>Take full rest days seriously</li>
         </ul>
       </div>
+
+      <div class="t-card" style="margin-top: 16px;">
+        <h3 class="t-card-title">🎬 Video Library</h3>
+        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 16px;">Reference videos for drills, exercises, and technique. Tap to watch.</p>
+        
+        <div style="margin-bottom: 16px;">
+          <h4 style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">🏹 String Walking & Drills</h4>
+          <ul class="t-video-list">
+            <li><a href="https://www.youtube.com/watch?v=Gy67VKxq3ck" target="_blank" rel="noopener">How to String Walk a Barebow — Jake Kaminski</a></li>
+            <li><a href="https://www.youtube.com/watch?v=x5oE6rS2hF4" target="_blank" rel="noopener">Barebow String Walking Tutorial</a></li>
+            <li><a href="https://www.youtube.com/watch?v=tHvS6ZdHBrM" target="_blank" rel="noopener">Jake Kaminski String Walk / Crawl Charting Drill</a></li>
+            <li><a href="https://www.youtube.com/watch?v=kE3oEmD31WY" target="_blank" rel="noopener">String Walking Demo — Progressive Distance</a></li>
+            <li><a href="https://www.youtube.com/playlist?list=PLxJp-Eauwqq3mSEG6SMZ_r0v5RDjfr4tJ" target="_blank" rel="noopener">Jake Kaminski Form Drills Playlist (Blank Bale & More)</a></li>
+            <li><a href="https://www.youtube.com/@JakeKaminski" target="_blank" rel="noopener">Jake Kaminski YouTube Channel — Full Library</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">💪 Strength & Conditioning</h4>
+          <ul class="t-video-list">
+            <li><a href="https://www.youtube.com/watch?v=aclHkVKqBbM" target="_blank" rel="noopener">Bodyweight Squats — Proper Form for Beginners</a></li>
+            <li><a href="https://www.youtube.com/watch?v=M_ooIhKYs7c" target="_blank" rel="noopener">Wall Angels Tutorial</a></li>
+            <li><a href="https://www.youtube.com/watch?v=z6PJMT2y8GQ" target="_blank" rel="noopener">Superman Holds Demo</a></li>
+            <li><a href="https://www.youtube.com/watch?v=pvIjsG5Svck" target="_blank" rel="noopener">Plank for Beginners — Proper Form</a></li>
+            <li><a href="https://www.youtube.com/watch?v=JObYtU7Y7ag" target="_blank" rel="noopener">Band Pull-Aparts Tutorial</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -446,6 +474,69 @@
 }
 
 .arrow-custom-input:focus { outline: none; border-color: var(--color-accent); }
+
+/* ─── Video List ─── */
+.t-video-list {
+  list-style: none;
+  padding: 0;
+}
+
+.t-video-list li {
+  margin-bottom: 0;
+}
+
+.t-video-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background var(--transition);
+}
+
+.t-video-list a:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-accent-hover);
+}
+
+.t-video-list a::before {
+  content: '▶';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  background: var(--color-accent-light);
+  color: var(--color-accent-hover);
+  border-radius: 50%;
+  font-size: 0.7rem;
+}
+
+/* ─── Inline Video Links (in checklists) ─── */
+.t-inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  padding: 2px 8px;
+  background: var(--color-accent-light);
+  color: var(--color-accent-hover) !important;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+
+.t-inline-link:hover {
+  background: var(--color-accent);
+  color: var(--color-bg) !important;
+}
 </style>
 
 <script>
@@ -457,51 +548,51 @@ const SCHEDULE = {
   ]},
   1: { type: 'shoot', label: 'Technique Day', emoji: '🏹', tasks: [
     { cat: 'Warm-up', text: '10-15 min warm-up (march in place, arm circles)' },
-    { cat: 'Shooting', text: 'Blank Bale Form Drill — 30 arrows close range, focus on release & anchor' },
-    { cat: 'Shooting', text: 'Crawl Charting Drill — chart crawls for 10ft, 20yd, 30yd, 40yd, 55yd' },
+    { cat: 'Shooting', text: 'Blank Bale Form Drill — 30 arrows close range, focus on release & anchor <a href="https://www.youtube.com/playlist?list=PLxJp-Eauwqq3mSEG6SMZ_r0v5RDjfr4tJ" target="_blank" class="t-inline-link">▶ Video</a>' },
+    { cat: 'Shooting', text: 'Crawl Charting Drill — chart crawls for 10ft, 20yd, 30yd, 40yd, 55yd <a href="https://www.youtube.com/watch?v=tHvS6ZdHBrM" target="_blank" class="t-inline-link">▶ Video</a>' },
     { cat: 'Shooting', text: 'Technique arrows — 150-250 total, focus on form over score' },
-    { cat: 'Drill', text: 'Release Isolation — slow motion release practice at anchor' },
+    { cat: 'Drill', text: 'Release Isolation — slow motion release practice at anchor <a href="https://www.youtube.com/playlist?list=PLxJp-Eauwqq3mSEG6SMZ_r0v5RDjfr4tJ" target="_blank" class="t-inline-link">▶ Video</a>' },
     { cat: 'Logging', text: 'Log session: arrow count, form notes, crawl adjustments' }
   ]},
   2: { type: 'gym', label: 'S&C Day', emoji: '💪', tasks: [
     { cat: 'Warm-up', text: '10 min warm-up (march in place, arm circles)' },
-    { cat: 'Strength', text: 'Bodyweight Squats — 3 sets of 10-15' },
-    { cat: 'Strength', text: 'Wall Angels — 3 sets of 10' },
-    { cat: 'Strength', text: 'Superman Holds — 3 sets of 15-20 sec' },
-    { cat: 'Strength', text: 'Plank — 3 sets of 20-30 sec' },
-    { cat: 'Strength', text: 'Band Pull-Aparts — 3 sets of 15' },
+    { cat: 'Strength', text: 'Bodyweight Squats — 3 sets of 10-15 <a href="https://www.youtube.com/watch?v=aclHkVKqBbM" target="_blank" class="t-inline-link">▶ Video</a>' },
+    { cat: 'Strength', text: 'Wall Angels — 3 sets of 10 <a href="https://www.youtube.com/watch?v=M_ooIhKYs7c" target="_blank" class="t-inline-link">▶ Video</a>' },
+    { cat: 'Strength', text: 'Superman Holds — 3 sets of 15-20 sec <a href="https://www.youtube.com/watch?v=z6PJMT2y8GQ" target="_blank" class="t-inline-link">▶ Video</a>' },
+    { cat: 'Strength', text: 'Plank — 3 sets of 20-30 sec <a href="https://www.youtube.com/watch?v=pvIjsG5Svck" target="_blank" class="t-inline-link">▶ Video</a>' },
+    { cat: 'Strength', text: 'Band Pull-Aparts — 3 sets of 15 <a href="https://www.youtube.com/watch?v=JObYtU7Y7ag" target="_blank" class="t-inline-link">▶ Video</a>' },
     { cat: 'Recovery', text: 'Stretch and cool down' }
   ]},
   3: { type: 'shoot', label: 'Scoring Day', emoji: '🏹', tasks: [
     { cat: 'Warm-up', text: '10-15 min warm-up (march in place, arm circles)' },
     { cat: 'Shooting', text: '20yd Indoor Scoring Drill — 5-arrow ends, competition style' },
     { cat: 'Shooting', text: 'Scoring session — 120-200 arrows at marked distances' },
-    { cat: 'Drill', text: 'Progressive Distance Walk — 10ft out to 55yd, changing crawls' },
+    { cat: 'Drill', text: 'Progressive Distance Walk — 10ft out to 55yd, changing crawls <a href="https://www.youtube.com/watch?v=kE3oEmD31WY" target="_blank" class="t-inline-link">▶ Video</a>' },
     { cat: 'Logging', text: 'Log session: scores, arrow count, distance notes' }
   ]},
   4: { type: 'gym', label: 'S&C Day', emoji: '💪', tasks: [
     { cat: 'Warm-up', text: '10 min warm-up (march in place, arm circles)' },
-    { cat: 'Strength', text: 'Bodyweight Squats — 3 sets of 10-15' },
-    { cat: 'Strength', text: 'Wall Angels — 3 sets of 10' },
-    { cat: 'Strength', text: 'Superman Holds — 3 sets of 15-20 sec' },
-    { cat: 'Strength', text: 'Plank — 3 sets of 20-30 sec' },
-    { cat: 'Strength', text: 'Band Pull-Aparts — 3 sets of 15' },
+    { cat: 'Strength', text: 'Bodyweight Squats — 3 sets of 10-15 <a href="https://www.youtube.com/watch?v=aclHkVKqBbM" target="_blank" class="t-inline-link">▶ Video</a>' },
+    { cat: 'Strength', text: 'Wall Angels — 3 sets of 10 <a href="https://www.youtube.com/watch?v=M_ooIhKYs7c" target="_blank" class="t-inline-link">▶ Video</a>' },
+    { cat: 'Strength', text: 'Superman Holds — 3 sets of 15-20 sec <a href="https://www.youtube.com/watch?v=z6PJMT2y8GQ" target="_blank" class="t-inline-link">▶ Video</a>' },
+    { cat: 'Strength', text: 'Plank — 3 sets of 20-30 sec <a href="https://www.youtube.com/watch?v=pvIjsG5Svck" target="_blank" class="t-inline-link">▶ Video</a>' },
+    { cat: 'Strength', text: 'Band Pull-Aparts — 3 sets of 15 <a href="https://www.youtube.com/watch?v=JObYtU7Y7ag" target="_blank" class="t-inline-link">▶ Video</a>' },
     { cat: 'Recovery', text: 'Stretch and cool down' }
   ]},
   5: { type: 'shoot', label: 'Volume Day', emoji: '🏹', tasks: [
     { cat: 'Warm-up', text: '10-15 min warm-up (march in place, arm circles)' },
-    { cat: 'Shooting', text: 'Blank Bale warm-up — 20 arrows for form' },
+    { cat: 'Shooting', text: 'Blank Bale warm-up — 20 arrows for form <a href="https://www.youtube.com/playlist?list=PLxJp-Eauwqq3mSEG6SMZ_r0v5RDjfr4tJ" target="_blank" class="t-inline-link">▶ Video</a>' },
     { cat: 'Shooting', text: 'Volume session — 180-300 arrows, mix distances' },
     { cat: 'Drill', text: 'Field Simulation — mix distances 10ft-55yd in one session' },
-    { cat: 'Drill', text: 'Crawl Charting — verify and adjust your crawl marks' },
+    { cat: 'Drill', text: 'Crawl Charting — verify and adjust your crawl marks <a href="https://www.youtube.com/watch?v=tHvS6ZdHBrM" target="_blank" class="t-inline-link">▶ Video</a>' },
     { cat: 'Logging', text: 'Log session: total arrows, fatigue notes, form breakdown point' }
   ]},
   6: { type: 'shoot', label: 'Long Session', emoji: '🏹', tasks: [
     { cat: 'Warm-up', text: '10-15 min warm-up (march in place, arm circles)' },
-    { cat: 'Shooting', text: 'Blank Bale warm-up — 20 arrows for form' },
+    { cat: 'Shooting', text: 'Blank Bale warm-up — 20 arrows for form <a href="https://www.youtube.com/playlist?list=PLxJp-Eauwqq3mSEG6SMZ_r0v5RDjfr4tJ" target="_blank" class="t-inline-link">▶ Video</a>' },
     { cat: 'Shooting', text: 'Long session — 200-350 arrows, all distances' },
     { cat: 'Drill', text: '20yd Indoor Scoring — 5-arrow ends, track scores' },
-    { cat: 'Drill', text: 'Progressive Distance Walk — full range 10ft to 55yd' },
+    { cat: 'Drill', text: 'Progressive Distance Walk — full range 10ft to 55yd <a href="https://www.youtube.com/watch?v=kE3oEmD31WY" target="_blank" class="t-inline-link">▶ Video</a>' },
     { cat: 'Drill', text: 'Field Simulation — random distances, competition mindset' },
     { cat: 'Logging', text: 'Log session: total arrows, best scores, weekly reflections' }
   ]}
