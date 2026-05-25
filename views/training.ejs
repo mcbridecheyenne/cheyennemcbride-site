@@ -337,7 +337,115 @@
 @media (max-width: 600px) {
   .t-stats-grid { grid-template-columns: 1fr 1fr; }
   .training-tab { padding: 10px 14px; font-size: 0.8rem; }
+  .arrow-counter-row { flex-direction: column; }
 }
+
+/* ─── Arrow Counter ─── */
+.arrow-counter {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.arrow-counter-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent-hover);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arrow-counter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.arrow-count-display {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  min-width: 80px;
+  text-align: center;
+}
+
+.arrow-btn {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-family);
+  transition: all var(--transition);
+  padding: 10px 16px;
+}
+
+.arrow-btn:hover { border-color: var(--color-accent); background: var(--color-accent-light); }
+.arrow-btn:active { transform: scale(0.95); }
+
+.arrow-btn.primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.arrow-btn.primary:hover { background: var(--color-accent-hover); }
+
+.arrow-btn.danger {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.arrow-btn.danger:hover { background: var(--color-error-bg); }
+
+.arrow-btn.finish {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: var(--color-bg);
+  padding: 10px 20px;
+}
+
+.arrow-btn.finish:hover { opacity: 0.9; }
+
+.arrow-finished {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  color: var(--color-success);
+  margin-top: 12px;
+}
+
+.arrow-quick-add {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.arrow-custom-input {
+  width: 70px;
+  padding: 8px 10px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-family: var(--font-family);
+  text-align: center;
+}
+
+.arrow-custom-input:focus { outline: none; border-color: var(--color-accent); }
 </style>
 
 <script>
@@ -451,6 +559,33 @@ async function saveCheck(dateStr, taskIndex, checked) {
   }
 }
 
+// ─── Session Cache ───
+let sessionCache = {};
+
+async function loadSession(dateStr) {
+  if (sessionCache[dateStr] !== undefined) return sessionCache[dateStr];
+  try {
+    const r = await fetch('/api/training/session?date=' + dateStr);
+    const data = await r.json();
+    sessionCache[dateStr] = data;
+    return data;
+  } catch (e) {
+    console.error('Failed to load session:', e);
+    return { arrow_count: 0, notes: '', finished: false };
+  }
+}
+
+async function loadSessionsRange(startStr, endStr) {
+  try {
+    const r = await fetch('/api/training/sessions/range?start=' + startStr + '&end=' + endStr);
+    const data = await r.json();
+    if (data.sessions) {
+      Object.keys(data.sessions).forEach(d => { sessionCache[d] = data.sessions[d]; });
+    }
+    return data.sessions || {};
+  } catch (e) { return {}; }
+}
+
 // ─── Tabs ───
 function switchTab(name) {
   document.querySelectorAll('.training-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
@@ -468,6 +603,8 @@ async function renderToday() {
   const dateStr = formatDate(now);
   const dayInfo = getDayTasks(now);
   const checks = await loadChecks(dateStr);
+  const session = await loadSession(dateStr);
+  const isShootDay = dayInfo.type === 'shoot';
 
   const completed = dayInfo.tasks.filter((_, i) => checks[i]).length;
   const total = dayInfo.tasks.length;
@@ -485,6 +622,67 @@ async function renderToday() {
         <div class="t-full-progress-fill" style="width: ${pct}%; background: ${color};"></div>
       </div>
     </div>
+  `;
+
+  // Arrow counter (only on shooting days)
+  if (isShootDay) {
+    const arrows = session.arrow_count || 0;
+    const finished = session.finished || false;
+    // Get suggested range from schedule
+    const ranges = { 1: [150, 250], 3: [120, 200], 5: [180, 300], 6: [200, 350] };
+    const range = ranges[now.getDay()] || [150, 300];
+    const arrowPct = Math.min(100, Math.round((arrows / range[1]) * 100));
+
+    if (finished) {
+      html += `
+        <div class="arrow-counter">
+          <div class="arrow-counter-title">🏹 Arrow Counter</div>
+          <div class="arrow-finished">
+            ✅ Session complete — <strong>${arrows} arrows</strong> logged today
+          </div>
+          <div style="margin-top: 12px; display: flex; gap: 8px;">
+            <button class="arrow-btn" onclick="reopenSession('${dateStr}')">🔓 Reopen Session</button>
+          </div>
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="arrow-counter">
+          <div class="arrow-counter-title">🏹 Arrow Counter</div>
+          <div class="arrow-counter-row">
+            <div>
+              <div class="arrow-count-display" id="arrowDisplay">${arrows}</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-muted); text-align: center;">arrows shot</div>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px;">Quick add per end:</div>
+              <div class="arrow-quick-add">
+                <button class="arrow-btn" onclick="addArrows('${dateStr}', 3)">+3</button>
+                <button class="arrow-btn" onclick="addArrows('${dateStr}', 5)">+5</button>
+                <button class="arrow-btn" onclick="addArrows('${dateStr}', 6)">+6</button>
+                <button class="arrow-btn" onclick="addArrows('${dateStr}', 10)">+10</button>
+                <input type="number" class="arrow-custom-input" id="customArrowInput" placeholder="#" min="1" max="100">
+                <button class="arrow-btn primary" onclick="addCustomArrows('${dateStr}')">Add</button>
+              </div>
+              <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+                <div class="t-progress-bar" style="flex: 1; height: 6px;">
+                  <div class="t-progress-fill ${arrowPct >= 100 ? 'complete' : ''}" style="width: ${arrowPct}%"></div>
+                </div>
+                <span style="font-size: 0.75rem; color: var(--color-text-muted);">${arrows}/${range[0]}-${range[1]} target</span>
+              </div>
+              <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="arrow-btn" onclick="subtractArrows('${dateStr}', 1)">− 1</button>
+                <button class="arrow-btn danger" onclick="resetArrows('${dateStr}')">Reset</button>
+                ${arrows >= range[0] ? `<button class="arrow-btn finish" onclick="finishSession('${dateStr}')">\u2705 Finish Session</button>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  html += `
     <div class="t-day open t-today">
       <div class="t-day-body" style="display: block; padding-top: 16px;">
         <ul class="t-checklist">
@@ -507,6 +705,71 @@ async function renderToday() {
   document.getElementById('tab-today').innerHTML = html;
 }
 
+// ─── Arrow Actions ───
+async function addArrows(dateStr, count) {
+  const session = await loadSession(dateStr);
+  const newCount = (session.arrow_count || 0) + count;
+  sessionCache[dateStr] = { ...session, arrow_count: newCount };
+  await fetch('/api/training/session/arrows', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date: dateStr, arrow_count: newCount })
+  });
+  renderToday();
+}
+
+function addCustomArrows(dateStr) {
+  const input = document.getElementById('customArrowInput');
+  const val = parseInt(input.value);
+  if (val > 0) {
+    addArrows(dateStr, val);
+    input.value = '';
+  }
+}
+
+async function subtractArrows(dateStr, count) {
+  const session = await loadSession(dateStr);
+  const newCount = Math.max(0, (session.arrow_count || 0) - count);
+  sessionCache[dateStr] = { ...session, arrow_count: newCount };
+  await fetch('/api/training/session/arrows', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date: dateStr, arrow_count: newCount })
+  });
+  renderToday();
+}
+
+async function resetArrows(dateStr) {
+  if (!confirm('Reset arrow count to 0?')) return;
+  sessionCache[dateStr] = { arrow_count: 0, notes: '', finished: false };
+  await fetch('/api/training/session/arrows', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date: dateStr, arrow_count: 0 })
+  });
+  renderToday();
+}
+
+async function finishSession(dateStr) {
+  sessionCache[dateStr] = { ...sessionCache[dateStr], finished: true };
+  await fetch('/api/training/session/finish', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date: dateStr })
+  });
+  renderToday();
+}
+
+async function reopenSession(dateStr) {
+  sessionCache[dateStr] = { ...sessionCache[dateStr], finished: false };
+  await fetch('/api/training/session/reopen', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date: dateStr })
+  });
+  renderToday();
+}
+
 // ─── Render Week ───
 async function renderWeek() {
   const now = new Date();
@@ -523,6 +786,7 @@ async function renderWeek() {
   const startStr = formatDate(days[0]);
   const endStr = formatDate(days[6]);
   await loadChecksRange(startStr, endStr);
+  await loadSessionsRange(startStr, endStr);
 
   const weekStartLabel = days[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   const weekEndLabel = days[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -545,6 +809,9 @@ async function renderWeek() {
     const total = dayInfo.tasks.length;
     const pct = total ? Math.round((completed / total) * 100) : 0;
     const today = isToday(d);
+    const sess = sessionCache[dateStr] || {};
+    const dayArrows = sess.arrow_count || 0;
+    const dayFinished = sess.finished || false;
 
     html += `
       <div class="t-day ${today ? 't-today' : ''}" id="day-${dateStr}">
@@ -553,6 +820,7 @@ async function renderWeek() {
             ${dayNames[d.getDay()]} ${d.getDate()} ${dayInfo.emoji}
             ${today ? '<span class="t-badge">TODAY</span>' : ''}
             <span class="t-type-badge">${dayInfo.label}</span>
+            ${dayInfo.type === 'shoot' && dayArrows > 0 ? `<span class="t-type-badge" style="background: var(--color-accent-light); color: var(--color-accent-hover);">${dayArrows} arrows${dayFinished ? ' ✅' : ''}</span>` : ''}
           </div>
           <div class="t-day-progress">
             <span class="pct ${pct === 100 ? 'complete' : ''}">${pct}%</span>
@@ -606,6 +874,14 @@ async function renderStats() {
   const d28ago = new Date(now);
   d28ago.setDate(now.getDate() - 27);
   await loadChecksRange(formatDate(d28ago), formatDate(now));
+  await loadSessionsRange(formatDate(d28ago), formatDate(now));
+
+  // Also fetch arrow stats from the API
+  let arrowStats = { all_time: { total: 0, sessions: 0 }, last_28: { total: 0, sessions: 0, avg: 0 }, this_week: { total: 0, sessions: 0 }, best_session: { arrows: 0, date: null } };
+  try {
+    const r = await fetch('/api/training/arrow-stats');
+    arrowStats = await r.json();
+  } catch (e) {}
 
   let totalTasks = 0, completedTasks = 0, daysTracked = 0, perfectDays = 0;
   let currentStreak = 0, streakBroken = false;
@@ -716,6 +992,32 @@ async function renderStats() {
   });
 
   html += `
+      </div>
+    </div>
+
+    <div class="t-card" style="margin-top: 16px;">
+      <h3 class="t-card-title">🏹 Arrow Stats</h3>
+      <div class="t-stats-grid" style="margin-top: 12px;">
+        <div class="t-stat">
+          <div class="t-stat-label">This Week</div>
+          <div class="t-stat-value t-accent">${arrowStats.this_week.total}</div>
+          <div class="t-stat-sub">${arrowStats.this_week.sessions} session${arrowStats.this_week.sessions !== 1 ? 's' : ''}</div>
+        </div>
+        <div class="t-stat">
+          <div class="t-stat-label">Last 28 Days</div>
+          <div class="t-stat-value t-accent">${arrowStats.last_28.total}</div>
+          <div class="t-stat-sub">ø ${arrowStats.last_28.avg} per session</div>
+        </div>
+        <div class="t-stat">
+          <div class="t-stat-label">All Time</div>
+          <div class="t-stat-value t-green">${arrowStats.all_time.total}</div>
+          <div class="t-stat-sub">${arrowStats.all_time.sessions} session${arrowStats.all_time.sessions !== 1 ? 's' : ''} logged</div>
+        </div>
+        <div class="t-stat">
+          <div class="t-stat-label">Best Session</div>
+          <div class="t-stat-value t-accent">${arrowStats.best_session.arrows}</div>
+          <div class="t-stat-sub">${arrowStats.best_session.date || '—'}</div>
+        </div>
       </div>
     </div>
 
