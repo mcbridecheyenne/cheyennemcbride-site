@@ -1,5 +1,5 @@
 const express = require('express');
-const { ensureAdmin } = require('../middleware/auth');
+const { ensureAdmin, ensureAuthenticated } = require('../middleware/auth');
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -16,6 +16,10 @@ router.get('/admin', ensureAdmin, (req, res) => {
 
 router.get('/admin/calendar', ensureAdmin, (req, res) => {
   res.render('admin-calendar', { user: req.user });
+});
+
+router.get('/training', ensureAuthenticated, (req, res) => {
+  res.render('training', { user: req.user });
 });
 
 module.exports = router;

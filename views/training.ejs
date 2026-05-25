@@ -1,0 +1,761 @@
+<%- include('partials/header') %>
+
+<section class="section" style="padding-top: 100px;">
+  <div class="container">
+
+    <!-- Page Header -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <h1 style="font-size: 1.75rem; font-weight: 700; display: flex; align-items: center; gap: 10px;">
+          🏹 <span>Barebow Training Tracker</span>
+        </h1>
+        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 4px;">String Walking Periodized Plan</p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="training-tabs" id="trainingTabs">
+      <button class="training-tab active" data-tab="today" onclick="switchTab('today')">📋 Today</button>
+      <button class="training-tab" data-tab="week" onclick="switchTab('week')">📅 Week</button>
+      <button class="training-tab" data-tab="stats" onclick="switchTab('stats')">📊 Stats</button>
+      <button class="training-tab" data-tab="plan" onclick="switchTab('plan')">📖 Plan</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="training-content" id="tab-today"></div>
+    <div class="training-content" id="tab-week" style="display:none;"></div>
+    <div class="training-content" id="tab-stats" style="display:none;"></div>
+    <div class="training-content" id="tab-plan" style="display:none;">
+      <div class="t-card" style="margin-bottom: 16px;">
+        <h3 class="t-card-title">🎯 Overview & Philosophy</h3>
+        <ul class="t-list">
+          <li>Quality over quantity</li>
+          <li>Track every session — arrows, scores, notes</li>
+          <li>Warm-up 10-15 min before shooting</li>
+          <li>Rest if form breaks down</li>
+        </ul>
+      </div>
+      <div class="t-card" style="margin-bottom: 16px;">
+        <h3 class="t-card-title">🧵 String Walking Setup</h3>
+        <p style="line-height: 1.6;">Use consistent tab marks for crawls. Arrow tip on gold, adjust fingers down the string for distance. Chart your crawls for: 10ft, 20yd, 30yd, 40yd, 55yd.</p>
+      </div>
+      <div class="t-card" style="margin-bottom: 16px;">
+        <h3 class="t-card-title">📅 4-Week Periodized Schedule</h3>
+        <ul class="t-list">
+          <li><strong>Week 1 (Base):</strong> Lower volume, technique focus</li>
+          <li><strong>Weeks 2-3:</strong> Build volume</li>
+          <li><strong>Week 4:</strong> Taper or maintain</li>
+        </ul>
+        <br>
+        <p style="font-weight: 600;">Sample Weekly Schedule (4-5 shooting days):</p>
+        <ul class="t-list">
+          <li><strong>Monday:</strong> Technique — 150-250 arrows</li>
+          <li><strong>Wednesday:</strong> Scoring — 120-200 arrows</li>
+          <li><strong>Friday:</strong> Volume — 180-300 arrows</li>
+          <li><strong>Saturday:</strong> Long Session — 200-350 arrows</li>
+          <li><strong>Tue / Thu / Sun:</strong> Rest or S&C</li>
+        </ul>
+      </div>
+      <div class="t-card" style="margin-bottom: 16px;">
+        <h3 class="t-card-title">💪 Strength & Conditioning (2-3x/week)</h3>
+        <p style="margin-bottom: 8px;">Warm-up: March in place, arm circles</p>
+        <ul class="t-list">
+          <li>Bodyweight Squats</li>
+          <li>Wall Angels</li>
+          <li>Superman Holds</li>
+          <li>Plank</li>
+          <li>Band Pull-Aparts</li>
+        </ul>
+      </div>
+      <div class="t-card" style="margin-bottom: 16px;">
+        <h3 class="t-card-title">🎯 Shooting Drills (20-50 arrows per drill)</h3>
+        <ul class="t-list">
+          <li><strong>Drill 1 — Crawl Charting:</strong> Chart crawls for 10ft, 20yd, 30yd, 40yd, 55yd.</li>
+          <li><strong>Drill 2 — Blank Bale Form:</strong> Shoot at close range (5-10ft), focus on release & anchor.</li>
+          <li><strong>Drill 3 — Progressive Distance Walk:</strong> Start at 10ft, walk back to 55yd.</li>
+          <li><strong>Drill 4 — 20yd Indoor Scoring:</strong> 5-arrow ends, competition style.</li>
+          <li><strong>Drill 5 — Field Simulation:</strong> Mix distances 10ft-55yd in one session.</li>
+          <li><strong>Drill 6 — Release Isolation:</strong> Slow motion release practice at anchor.</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h3 class="t-card-title">🥗 Nutrition & Recovery</h3>
+        <ul class="t-list">
+          <li>Stay hydrated, eat balanced meals</li>
+          <li>Sleep well — recovery is training</li>
+          <li>Take full rest days seriously</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+/* ─── Training Tabs ─── */
+.training-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 24px;
+}
+
+.training-tab {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.training-tab:hover { color: var(--color-text); }
+.training-tab.active { color: var(--color-accent-hover); border-bottom-color: var(--color-accent); }
+
+/* ─── Training Cards ─── */
+.t-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.t-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--color-accent-hover);
+}
+
+.t-list { padding-left: 20px; }
+.t-list li { margin-bottom: 6px; font-size: 0.9rem; line-height: 1.5; }
+
+/* ─── Stats Grid ─── */
+.t-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.t-stat {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.t-stat-label { font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.t-stat-value { font-size: 1.75rem; font-weight: 700; margin-top: 4px; }
+.t-stat-sub { font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px; }
+.t-green { color: var(--color-success); }
+.t-accent { color: var(--color-accent-hover); }
+.t-red { color: var(--color-error); }
+
+/* ─── Day Card ─── */
+.t-day {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+
+.t-day.t-today { border-color: var(--color-accent); }
+
+.t-day-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition);
+}
+
+.t-day-head:hover { background: var(--color-surface-hover); }
+
+.t-day-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.t-badge {
+  font-size: 0.7rem;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.t-type-badge {
+  font-size: 0.7rem;
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.t-day-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.t-day-progress .pct { font-weight: 600; }
+.t-day-progress .pct.complete { color: var(--color-success); }
+
+.t-progress-bar {
+  width: 60px;
+  height: 4px;
+  background: var(--color-bg);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.t-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.t-progress-fill.complete { background: var(--color-success); }
+
+.t-day-body { padding: 0 20px 16px; display: none; }
+.t-day.open .t-day-body { display: block; }
+
+/* ─── Checklist ─── */
+.t-checklist { list-style: none; }
+
+.t-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.t-checklist li:last-child { border-bottom: none; }
+
+.t-checklist input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 1px;
+  position: relative;
+  transition: all var(--transition);
+  background: transparent;
+}
+
+.t-checklist input[type="checkbox"]:hover { border-color: var(--color-accent); }
+
+.t-checklist input[type="checkbox"]:checked {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.t-checklist input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: var(--color-bg);
+  font-weight: 700;
+}
+
+.t-item-text { flex: 1; }
+.t-item-text.done { text-decoration: line-through; color: var(--color-text-muted); }
+.t-item-cat { font-size: 0.7rem; color: var(--color-accent-hover); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px; }
+
+/* ─── Full-width progress bar ─── */
+.t-full-progress {
+  width: 100%;
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.t-full-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+/* ─── Bar Chart ─── */
+.t-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 120px;
+  padding-top: 8px;
+}
+
+.t-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.t-bar {
+  width: 100%;
+  max-width: 36px;
+  border-radius: 4px 4px 0 0;
+  background: var(--color-accent);
+  min-height: 2px;
+  transition: height 0.3s;
+}
+
+.t-bar.empty { background: var(--color-border); }
+.t-bar-label { font-size: 0.65rem; color: var(--color-text-muted); }
+
+@media (max-width: 600px) {
+  .t-stats-grid { grid-template-columns: 1fr 1fr; }
+  .training-tab { padding: 10px 14px; font-size: 0.8rem; }
+}
+</style>
+
+<script>
+// ─── Training Plan Schedule ───
+const SCHEDULE = {
+  0: { type: 'rest', label: 'Rest Day', emoji: '😴', tasks: [
+    { cat: 'Recovery', text: 'Full rest — hydrate & stretch' },
+    { cat: 'Nutrition', text: 'Eat balanced meals, sleep well' }
+  ]},
+  1: { type: 'shoot', label: 'Technique Day', emoji: '🏹', tasks: [
+    { cat: 'Warm-up', text: '10-15 min warm-up (march in place, arm circles)' },
+    { cat: 'Shooting', text: 'Blank Bale Form Drill — 30 arrows close range, focus on release & anchor' },
+    { cat: 'Shooting', text: 'Crawl Charting Drill — chart crawls for 10ft, 20yd, 30yd, 40yd, 55yd' },
+    { cat: 'Shooting', text: 'Technique arrows — 150-250 total, focus on form over score' },
+    { cat: 'Drill', text: 'Release Isolation — slow motion release practice at anchor' },
+    { cat: 'Logging', text: 'Log session: arrow count, form notes, crawl adjustments' }
+  ]},
+  2: { type: 'gym', label: 'S&C Day', emoji: '💪', tasks: [
+    { cat: 'Warm-up', text: '10 min warm-up (march in place, arm circles)' },
+    { cat: 'Strength', text: 'Bodyweight Squats — 3 sets of 10-15' },
+    { cat: 'Strength', text: 'Wall Angels — 3 sets of 10' },
+    { cat: 'Strength', text: 'Superman Holds — 3 sets of 15-20 sec' },
+    { cat: 'Strength', text: 'Plank — 3 sets of 20-30 sec' },
+    { cat: 'Strength', text: 'Band Pull-Aparts — 3 sets of 15' },
+    { cat: 'Recovery', text: 'Stretch and cool down' }
+  ]},
+  3: { type: 'shoot', label: 'Scoring Day', emoji: '🏹', tasks: [
+    { cat: 'Warm-up', text: '10-15 min warm-up (march in place, arm circles)' },
+    { cat: 'Shooting', text: '20yd Indoor Scoring Drill — 5-arrow ends, competition style' },
+    { cat: 'Shooting', text: 'Scoring session — 120-200 arrows at marked distances' },
+    { cat: 'Drill', text: 'Progressive Distance Walk — 10ft out to 55yd, changing crawls' },
+    { cat: 'Logging', text: 'Log session: scores, arrow count, distance notes' }
+  ]},
+  4: { type: 'gym', label: 'S&C Day', emoji: '💪', tasks: [
+    { cat: 'Warm-up', text: '10 min warm-up (march in place, arm circles)' },
+    { cat: 'Strength', text: 'Bodyweight Squats — 3 sets of 10-15' },
+    { cat: 'Strength', text: 'Wall Angels — 3 sets of 10' },
+    { cat: 'Strength', text: 'Superman Holds — 3 sets of 15-20 sec' },
+    { cat: 'Strength', text: 'Plank — 3 sets of 20-30 sec' },
+    { cat: 'Strength', text: 'Band Pull-Aparts — 3 sets of 15' },
+    { cat: 'Recovery', text: 'Stretch and cool down' }
+  ]},
+  5: { type: 'shoot', label: 'Volume Day', emoji: '🏹', tasks: [
+    { cat: 'Warm-up', text: '10-15 min warm-up (march in place, arm circles)' },
+    { cat: 'Shooting', text: 'Blank Bale warm-up — 20 arrows for form' },
+    { cat: 'Shooting', text: 'Volume session — 180-300 arrows, mix distances' },
+    { cat: 'Drill', text: 'Field Simulation — mix distances 10ft-55yd in one session' },
+    { cat: 'Drill', text: 'Crawl Charting — verify and adjust your crawl marks' },
+    { cat: 'Logging', text: 'Log session: total arrows, fatigue notes, form breakdown point' }
+  ]},
+  6: { type: 'shoot', label: 'Long Session', emoji: '🏹', tasks: [
+    { cat: 'Warm-up', text: '10-15 min warm-up (march in place, arm circles)' },
+    { cat: 'Shooting', text: 'Blank Bale warm-up — 20 arrows for form' },
+    { cat: 'Shooting', text: 'Long session — 200-350 arrows, all distances' },
+    { cat: 'Drill', text: '20yd Indoor Scoring — 5-arrow ends, track scores' },
+    { cat: 'Drill', text: 'Progressive Distance Walk — full range 10ft to 55yd' },
+    { cat: 'Drill', text: 'Field Simulation — random distances, competition mindset' },
+    { cat: 'Logging', text: 'Log session: total arrows, best scores, weekly reflections' }
+  ]}
+};
+
+// ─── State ───
+let checksCache = {};
+let weekOffset = 0;
+
+// ─── Date Helpers ───
+function formatDate(d) { return d.toISOString().split('T')[0]; }
+function friendlyDate(d) { return d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }); }
+function isToday(d) { return d.toDateString() === new Date().toDateString(); }
+function getDayTasks(d) { return SCHEDULE[d.getDay()]; }
+
+// ─── API ───
+async function loadChecks(dateStr) {
+  if (checksCache[dateStr] !== undefined) return checksCache[dateStr];
+  try {
+    const r = await fetch('/api/training/checks?date=' + dateStr);
+    const data = await r.json();
+    checksCache[dateStr] = data.checks || {};
+    return checksCache[dateStr];
+  } catch (e) {
+    console.error('Failed to load checks:', e);
+    return {};
+  }
+}
+
+async function loadChecksRange(startStr, endStr) {
+  try {
+    const r = await fetch('/api/training/checks/range?start=' + startStr + '&end=' + endStr);
+    const data = await r.json();
+    if (data.days) {
+      Object.keys(data.days).forEach(d => { checksCache[d] = data.days[d]; });
+    }
+    return data.days || {};
+  } catch (e) {
+    console.error('Failed to load range:', e);
+    return {};
+  }
+}
+
+async function saveCheck(dateStr, taskIndex, checked) {
+  if (!checksCache[dateStr]) checksCache[dateStr] = {};
+  checksCache[dateStr][taskIndex] = checked;
+  try {
+    await fetch('/api/training/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date: dateStr, taskIndex, checked })
+    });
+  } catch (e) {
+    console.error('Failed to save check:', e);
+  }
+}
+
+// ─── Tabs ───
+function switchTab(name) {
+  document.querySelectorAll('.training-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  ['today', 'week', 'stats', 'plan'].forEach(id => {
+    document.getElementById('tab-' + id).style.display = id === name ? 'block' : 'none';
+  });
+  if (name === 'today') renderToday();
+  if (name === 'week') renderWeek();
+  if (name === 'stats') renderStats();
+}
+
+// ─── Render Today ───
+async function renderToday() {
+  const now = new Date();
+  const dateStr = formatDate(now);
+  const dayInfo = getDayTasks(now);
+  const checks = await loadChecks(dateStr);
+
+  const completed = dayInfo.tasks.filter((_, i) => checks[i]).length;
+  const total = dayInfo.tasks.length;
+  const pct = total ? Math.round((completed / total) * 100) : 0;
+  const color = pct === 100 ? 'var(--color-success)' : 'var(--color-accent)';
+
+  let html = `
+    <div style="margin-bottom: 20px;">
+      <h2 style="font-size: 1.3rem; margin-bottom: 4px;">${friendlyDate(now)}</h2>
+      <div style="display: flex; align-items: center; gap: 12px; margin-top: 8px;">
+        <span style="color: var(--color-text-muted); font-size: 0.85rem;">${dayInfo.emoji} ${dayInfo.label}</span>
+        <span style="color: ${color}; font-weight: 600; font-size: 0.85rem;">${pct}% complete</span>
+      </div>
+      <div class="t-full-progress">
+        <div class="t-full-progress-fill" style="width: ${pct}%; background: ${color};"></div>
+      </div>
+    </div>
+    <div class="t-day open t-today">
+      <div class="t-day-body" style="display: block; padding-top: 16px;">
+        <ul class="t-checklist">
+  `;
+
+  dayInfo.tasks.forEach((task, i) => {
+    const checked = !!checks[i];
+    html += `
+      <li>
+        <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck('${dateStr}', ${i}, this.checked, 'today')">
+        <div class="t-item-text ${checked ? 'done' : ''}">
+          <span class="t-item-cat">${task.cat}</span>
+          ${task.text}
+        </div>
+      </li>
+    `;
+  });
+
+  html += '</ul></div></div>';
+  document.getElementById('tab-today').innerHTML = html;
+}
+
+// ─── Render Week ───
+async function renderWeek() {
+  const now = new Date();
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay() + (weekOffset * 7));
+
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(startOfWeek);
+    d.setDate(startOfWeek.getDate() + i);
+    days.push(d);
+  }
+
+  const startStr = formatDate(days[0]);
+  const endStr = formatDate(days[6]);
+  await loadChecksRange(startStr, endStr);
+
+  const weekStartLabel = days[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const weekEndLabel = days[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+  let html = `
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+      <button class="t-nav-btn" onclick="changeWeek(-1)">←</button>
+      <span style="font-size: 0.95rem; font-weight: 600;">${weekStartLabel} — ${weekEndLabel}</span>
+      <button class="t-nav-btn" onclick="changeWeek(1)">→</button>
+    </div>
+  `;
+
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  for (const d of days) {
+    const dateStr = formatDate(d);
+    const dayInfo = getDayTasks(d);
+    const checks = checksCache[dateStr] || {};
+    const completed = dayInfo.tasks.filter((_, i) => checks[i]).length;
+    const total = dayInfo.tasks.length;
+    const pct = total ? Math.round((completed / total) * 100) : 0;
+    const today = isToday(d);
+
+    html += `
+      <div class="t-day ${today ? 't-today' : ''}" id="day-${dateStr}">
+        <div class="t-day-head" onclick="toggleDayCard('${dateStr}')">
+          <div class="t-day-name">
+            ${dayNames[d.getDay()]} ${d.getDate()} ${dayInfo.emoji}
+            ${today ? '<span class="t-badge">TODAY</span>' : ''}
+            <span class="t-type-badge">${dayInfo.label}</span>
+          </div>
+          <div class="t-day-progress">
+            <span class="pct ${pct === 100 ? 'complete' : ''}">${pct}%</span>
+            <div class="t-progress-bar">
+              <div class="t-progress-fill ${pct === 100 ? 'complete' : ''}" style="width: ${pct}%"></div>
+            </div>
+            <span>${completed}/${total}</span>
+          </div>
+        </div>
+        <div class="t-day-body">
+          <ul class="t-checklist">
+    `;
+
+    dayInfo.tasks.forEach((task, i) => {
+      const checked = !!checks[i];
+      html += `
+        <li>
+          <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck('${dateStr}', ${i}, this.checked, 'week')">
+          <div class="t-item-text ${checked ? 'done' : ''}">
+            <span class="t-item-cat">${task.cat}</span>
+            ${task.text}
+          </div>
+        </li>
+      `;
+    });
+
+    html += '</ul></div></div>';
+  }
+
+  document.getElementById('tab-week').innerHTML = html;
+}
+
+function toggleDayCard(dateStr) {
+  document.getElementById('day-' + dateStr).classList.toggle('open');
+}
+
+function changeWeek(dir) {
+  weekOffset += dir;
+  renderWeek();
+}
+
+async function toggleCheck(dateStr, taskIndex, checked, from) {
+  await saveCheck(dateStr, taskIndex, checked);
+  if (from === 'today') renderToday();
+  if (from === 'week') renderWeek();
+}
+
+// ─── Render Stats ───
+async function renderStats() {
+  const now = new Date();
+  const d28ago = new Date(now);
+  d28ago.setDate(now.getDate() - 27);
+  await loadChecksRange(formatDate(d28ago), formatDate(now));
+
+  let totalTasks = 0, completedTasks = 0, daysTracked = 0, perfectDays = 0;
+  let currentStreak = 0, streakBroken = false;
+  const last14 = [];
+
+  for (let i = 27; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    const dateStr = formatDate(d);
+    const dayInfo = getDayTasks(d);
+    const checks = checksCache[dateStr] || {};
+    const total = dayInfo.tasks.length;
+    const completed = dayInfo.tasks.filter((_, idx) => checks[idx]).length;
+    const hasData = Object.keys(checks).length > 0;
+
+    totalTasks += total;
+    completedTasks += completed;
+    if (hasData) daysTracked++;
+    if (completed === total && hasData) perfectDays++;
+
+    if (i < 14) {
+      last14.push({ date: d, completed, total, pct: total ? Math.round((completed / total) * 100) : 0 });
+    }
+
+    if (i <= 13 && !streakBroken) {
+      if (hasData && completed === total) currentStreak++;
+      else if (hasData) streakBroken = true;
+    }
+  }
+
+  const overallPct = totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+  // Today
+  const todayStr = formatDate(now);
+  const todayInfo = getDayTasks(now);
+  const todayChecks = checksCache[todayStr] || {};
+  const todayCompleted = todayInfo.tasks.filter((_, i) => todayChecks[i]).length;
+  const todayTotal = todayInfo.tasks.length;
+  const todayPct = todayTotal ? Math.round((todayCompleted / todayTotal) * 100) : 0;
+
+  // This week
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  let weekTasks = 0, weekCompleted = 0;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(startOfWeek);
+    d.setDate(startOfWeek.getDate() + i);
+    const dayInfo = getDayTasks(d);
+    const checks = checksCache[formatDate(d)] || {};
+    weekTasks += dayInfo.tasks.length;
+    weekCompleted += dayInfo.tasks.filter((_, idx) => checks[idx]).length;
+  }
+  const weekPct = weekTasks ? Math.round((weekCompleted / weekTasks) * 100) : 0;
+
+  const colorClass = (pct) => pct >= 80 ? 't-green' : pct >= 50 ? 't-accent' : 't-red';
+
+  let html = `
+    <div class="t-stats-grid">
+      <div class="t-stat">
+        <div class="t-stat-label">Today</div>
+        <div class="t-stat-value ${colorClass(todayPct)}">${todayPct}%</div>
+        <div class="t-stat-sub">${todayCompleted}/${todayTotal} tasks</div>
+      </div>
+      <div class="t-stat">
+        <div class="t-stat-label">This Week</div>
+        <div class="t-stat-value ${colorClass(weekPct)}">${weekPct}%</div>
+        <div class="t-stat-sub">${weekCompleted}/${weekTasks} tasks</div>
+      </div>
+      <div class="t-stat">
+        <div class="t-stat-label">28-Day Average</div>
+        <div class="t-stat-value ${colorClass(overallPct)}">${overallPct}%</div>
+        <div class="t-stat-sub">${completedTasks}/${totalTasks} tasks</div>
+      </div>
+      <div class="t-stat">
+        <div class="t-stat-label">Perfect Days (28d)</div>
+        <div class="t-stat-value t-accent">${perfectDays}</div>
+        <div class="t-stat-sub">100% completion days</div>
+      </div>
+    </div>
+
+    <div class="t-stats-grid" style="margin-bottom: 24px;">
+      <div class="t-stat">
+        <div class="t-stat-label">🔥 Current Streak</div>
+        <div class="t-stat-value t-green">${currentStreak}</div>
+        <div class="t-stat-sub">perfect days in a row</div>
+      </div>
+      <div class="t-stat">
+        <div class="t-stat-label">Days Tracked (28d)</div>
+        <div class="t-stat-value t-accent">${daysTracked}</div>
+        <div class="t-stat-sub">out of 28 days</div>
+      </div>
+    </div>
+
+    <div class="t-card">
+      <h3 class="t-card-title">📊 Last 14 Days</h3>
+      <div class="t-bar-chart">
+  `;
+
+  const dayLabels = ['S','M','T','W','T','F','S'];
+  last14.forEach(day => {
+    const h = day.pct > 0 ? Math.max(day.pct, 5) : 0;
+    html += `
+      <div class="t-bar-col">
+        <div class="t-bar ${h === 0 ? 'empty' : ''}" style="height: ${h}%; ${day.pct === 100 ? 'background: var(--color-success);' : ''}" title="${day.date.toLocaleDateString()}: ${day.pct}%"></div>
+        <div class="t-bar-label">${dayLabels[day.date.getDay()]}</div>
+      </div>
+    `;
+  });
+
+  html += `
+      </div>
+    </div>
+
+    <div class="t-card" style="margin-top: 16px;">
+      <h3 class="t-card-title">💡 Tips</h3>
+      <ul class="t-list">
+        <li>Complete all tasks for a day to earn a 🔥 streak day</li>
+        <li>Check off tasks as you go — saves automatically to your account</li>
+        <li>Aim for 80%+ weekly to stay on track</li>
+        <li>Rest days count too — recovery is part of training!</li>
+      </ul>
+    </div>
+  `;
+
+  document.getElementById('tab-stats').innerHTML = html;
+}
+
+// ─── Nav Button Style (injected) ───
+const style = document.createElement('style');
+style.textContent = `
+  .t-nav-btn {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+  }
+  .t-nav-btn:hover { border-color: var(--color-accent); }
+`;
+document.head.appendChild(style);
+
+// ─── Init ───
+renderToday();
+</script>
+
+<%- include('partials/footer') %>
